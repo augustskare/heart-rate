@@ -1,38 +1,68 @@
 class HeartRateMonitor {
   constructor() {
-    this.pairButton = document.querySelector('button');
+    this.device = null;
+    this.characteristics = {};
+    this.onValueChange = this.onValueChange.bind(this);
+  }
 
-    this._onPair = this._onPair.bind(this);
-    this._onError = this._onError.bind(this);
-    this._onChange = this._onChange.bind(this);
+  connectToDevice() {
+    return navigator.bluetooth.requestDevice({ 
+      filters: [{ services: ['heart_rate'] }],
+    }).then(device => {
+        this.device = device;
+        return device.gatt.connect()
+      })
+      .then(server => server.getPrimaryService('heart_rate'))
+      .then(service => Promise.all([
+        this._getCharacteristic(service, 'heart_rate_measurement'),
+        this._getCharacteristic(service, 'body_sensor_location'),
+      ])).then(() => this.device);
+  }
 
-    this.pairButton.addEventListener('click', event => {
-      navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] })
-        .then(this._onPair)
-        .catch(this._onError);
+  onValueChange(callback) {
+    const characteristic = this.characteristics['heart_rate_measurement'];
+
+    characteristic.startNotifications().then(characteristic => {
+      characteristic.addEventListener('characteristicvaluechanged', event => {
+        callback(this._convertHeartRateValue(event.target.value));
+      });
     });
   }
 
-  _onPair(device) {
-    device.gatt.connect()
-      .then(server => server.getPrimaryService('heart_rate'))
-      .then(service => service.getCharacteristic('heart_rate_measurement'))
-      .then(characteristic => characteristic.startNotifications())
-      .then(characteristic => {
-        characteristic.addEventListener('characteristicvaluechanged', this._onChange);
-      })
+  sensorLocation() {
+    return this.characteristics['body_sensor_location'].readValue().then(value => this._convertLocationType(value));
   }
 
-  _onChange(event) {
-    const hr = this.convertHeartRateValue(event.target.value);
-    console.log(hr);
+  _getCharacteristic(service, type) {
+    return service.getCharacteristic(type).then(characteristic => {
+      this.characteristics[type] = characteristic;
+      return characteristic;
+    });
   }
 
-  _onError(error) {
-    console.log(error);
+  _convertLocationType(value) {
+    // https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.characteristic.body_sensor_location.xml
+    switch(value.getUint8(0)) {
+        case 0:
+        return 'Other';
+      case 1: 
+        return 'Chest';
+      case 2:	
+        return 'Wrist';
+      case 3:	
+        return 'Finger';
+      case 4:	
+        return 'Hand';
+      case 5:	
+        return 'Ear Lobe';
+      case 6:	
+        return 'Foot';
+      default: 
+        return 'Unknown';
+    }
   }
 
-  convertHeartRateValue(value) {
+  _convertHeartRateValue(value) {
     const flags = value.getUint8(0);
     const rate16Bits = flags & 0x1;
 
@@ -41,4 +71,18 @@ class HeartRateMonitor {
 
 }
 
-new HeartRateMonitor();
+const heartRate = new HeartRateMonitor();
+
+
+
+
+
+document.querySelector('button').addEventListener('click', event => {
+  heartRate.connectToDevice().then(device => {
+    console.log(`Connected to: ${device.name}`);
+    heartRate.sensorLocation().then(value => console.log(`Device location: ${value}`));
+    heartRate.onValueChange(value => console.log('Heart rate: ' + value));
+  }).catch(error => {
+    console.log(error)
+  });
+});
