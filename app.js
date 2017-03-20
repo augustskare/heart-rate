@@ -5,7 +5,7 @@ class HeartRateMonitor {
     this.onValueChange = this.onValueChange.bind(this);
   }
 
-  connectToDevice() {
+  connect() {
     return navigator.bluetooth.requestDevice({ 
       filters: [{ services: ['heart_rate'] }],
     }).then(device => {
@@ -78,7 +78,7 @@ const heartRate = new HeartRateMonitor();
 
 
 document.querySelector('button').addEventListener('click', event => {
-  heartRate.connectToDevice().then(device => {
+  heartRate.connect().then(device => {
     console.log(`Connected to: ${device.name}`);
     heartRate.sensorLocation().then(value => console.log(`Device location: ${value}`));
     heartRate.onValueChange(value => console.log('Heart rate: ' + value));
