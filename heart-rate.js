@@ -5,6 +5,18 @@ css.innerHTML = `
     align-items: center;
   }
 
+  button {
+    font-family: inherit;
+    font-weight: 200;
+    font-size: 1em;
+    background: #bd3e3e;
+    color: inherit;
+    border-color: #bd3e3e;
+    border-style: solid;
+    border-radius: 10em;
+    padding: .5em 1em;
+  }
+
   .heart-rate {
     font-size: 3em;
     font-weight: 300;
