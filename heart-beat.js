@@ -86,6 +86,7 @@ class HeartBeat extends HTMLElement {
 
   disconnectedCallback() {
     this.connectButton.removeEventListener('click', this._onConnect);
+    this.monitor.disconnect();
   }
 
   _createTemplate() {
