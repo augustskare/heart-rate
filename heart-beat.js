@@ -60,7 +60,7 @@ css.innerHTML = `
   }
 `;
 
-class HeartRate extends HTMLElement {
+class HeartBeat extends HTMLElement {
   constructor() {
     super();
 
@@ -131,4 +131,4 @@ class HeartRate extends HTMLElement {
 
 }
 
-customElements.define('heart-rate', HeartRate);
+customElements.define('heart-beat', HeartBeat);
