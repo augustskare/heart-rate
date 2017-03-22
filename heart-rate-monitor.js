@@ -19,6 +19,10 @@ class HeartRateMonitor {
       ])).then(() => this.device);
   }
 
+  disconnect() {
+    this.device.gatt.disconnect();
+  }
+
   onValueChange(callback) {
     const characteristic = this.characteristics['heart_rate_measurement'];
 

@@ -96,8 +96,14 @@ class HeartRate extends HTMLElement {
         <title>Heart</title>
         <path d="M15.5 1c-1.74 0-3.41.81-4.5 2.09C9.91 1.81 8.24 1 6.5 1 3.42 1 1 3.42 1 6.5c0 3.78 3.4 6.86 8.55 11.54L11 19.35l1.45-1.32C17.6 13.36 21 10.28 21 6.5 21 3.42 18.58 1 15.5 1z"/>
       </svg>
-      <span class="heart-rate">0</span> 
+      <span class="heart-rate">0</span>  
     `;
+  }
+
+  disconnect() {
+    this.monitor.disconnect();
+    this.root.removeChild(this.template);
+    this.root.appendChild(this.connectButton);
   }
 
   _onConnect(event) {
