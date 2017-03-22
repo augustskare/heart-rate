@@ -66,6 +66,7 @@ class HeartBeat extends HTMLElement {
 
     this.monitor = new HeartRateMonitor();
     this.gotInitalValue = false;
+    this.event = new Event('change', { bubbles: true, composed: true });
 
     this.connectButton = document.createElement('button');
     this.connectButton.textContent = 'Connect heart rate monitor';
@@ -73,7 +74,7 @@ class HeartBeat extends HTMLElement {
     this.root = this.attachShadow({ mode: 'open' });
     this.root.appendChild(css);
     this.root.appendChild(this.connectButton);
-    
+
     this._createTemplate();
 
     this._onConnect = this._onConnect.bind(this);
@@ -127,7 +128,12 @@ class HeartBeat extends HTMLElement {
       this.template.classList.remove('loading');
       this.gotInitalValue = true;
     }
-    this.heartRate.textContent = value;
+
+    if (this.value !== value) {
+      this.value = value;
+      this.heartRate.textContent = value;
+      this.dispatchEvent(this.event);
+    }
   }
 
 }
