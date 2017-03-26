@@ -12,6 +12,16 @@
       color: #FFFFFF;
       margin: 0;
       display: flex;
+      flex-direction: column;
+    }
+     button {
+      font-family: inherit;
+      font-weight: 200;
+      font-size: 1em;
+      background: #bd3e3e;
+      color: inherit;
+      border: 0;
+      padding: .8em 1.2em;
     }
     heart-beat {
       margin: auto;
@@ -20,5 +30,34 @@
 </head>
 <body>
   <heart-beat></heart-beat>
+
+  <button type="button">Connect heart rate monitor</button>
+
+  <script>
+    const heartBeat = document.querySelector('heart-beat');
+    const baseLabel = 'Connect heart rate monitor';
+
+    document.querySelector('button').addEventListener('click', event => {
+      const target = event.target;
+      if (heartBeat.connected) {
+        heartBeat.disconnect();
+        target.textContent = baseLabel;
+      } else {
+        target.textContent = 'Connecting..';
+        target.disabled = true;
+        heartBeat.connect().then(device => {
+          target.textContent = 'Disconnect';
+          target.disabled = false;
+        });
+      }
+    });
+
+    heartBeat.addEventListener('change', event => {
+      const value = event.target.value;
+      console.log(value);
+    })
+
+  </script>
+
 </body>
 </html>
