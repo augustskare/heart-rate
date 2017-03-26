@@ -34,7 +34,7 @@
 
     :host([connected]) svg {
       fill: currentColor;
-      animation: loading 10s infinite forwards linear;
+      animation: heartbeat 1s infinite alternate both ease-in-out;
     }
 
     @keyframes loading {
@@ -44,7 +44,7 @@
     }
 
     @keyframes heartbeat {
-      100% {
+      to {
         transform: scale(1.1);
       }
     }
