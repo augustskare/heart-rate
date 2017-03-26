@@ -1,4 +1,4 @@
-class HeartBeat extends HTMLElement {
+class HeartRate extends HTMLElement {
   constructor() {
     super();
 
@@ -70,4 +70,4 @@ class HeartBeat extends HTMLElement {
 
 }
 
-customElements.define('heart-beat', HeartBeat);
+customElements.define('heart-rate', HeartRate);
