@@ -2,7 +2,7 @@
 
 Web component that displays heart rate from a Bluetooth connected heart rate monitor. 
 
-📡 [Demo]([https://augustskare.github.io/heart-rate/) 📡
+📡 [Demo](https://augustskare.github.io/heart-rate/) 📡
 
 ## Usage
 Import and insert the element in your document: 
