@@ -1,17 +1,17 @@
 # `<heart-rate></heart-rate>`
 
-Web component that connect's to a Bluetooth heart rate monitor, and displays the value. 
+Web component that displays heart rate from a Bluetooth connected heart rate monitor.
 
 ## Usage
 Import and insert the element in your document: 
 ```html
 <html>
-<head>
-  <link rel="import" href="heart-rate/heart-rate.html">
-</head>
-<body>
-  <heart-rate></heart-rate>
-</body>
+  <head>
+    <link rel="import" href="heart-rate/heart-rate.html">
+  </head>
+  <body>
+    <heart-rate></heart-rate>
+  </body>
 </html>
 ```
 
